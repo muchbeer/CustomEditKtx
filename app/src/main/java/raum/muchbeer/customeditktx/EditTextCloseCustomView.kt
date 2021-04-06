@@ -19,6 +19,8 @@ class EditTextCloseCustomView @JvmOverloads constructor(
 ) {
 
 var mClearButtonImage: Drawable
+ // var mSearchImage : Drawable
+
 
         init {
             mClearButtonImage = ResourcesCompat.getDrawable(
@@ -26,40 +28,51 @@ var mClearButtonImage: Drawable
                 R.drawable.ic_clear_black, null
             )!!
 
+
             setOnTouchListener(object : OnTouchListener {
                 override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-
-
 
                     // Use the getCompoundDrawables()[2] expression to check
                     // if the drawable is on the "end" of text [2].
                     if ((getCompoundDrawablesRelative()[2] != null)) {
+
                         val clearButtonStart: Int
                         val clearButtonEnd: Int
                         var isClearButtonClicked = false
+
+
+                    //    var isClearSearchClicked = false
                         if (getLayoutDirection() == LAYOUT_DIRECTION_RTL) {
                             // If RTL, get the end of the button on the left side.
                             clearButtonEnd = mClearButtonImage.intrinsicWidth + paddingStart
                             // If the touch occurred before the end of the button,
                             // set isClearButtonClicked to true.
                             if (event!!.getX() < clearButtonEnd) {
-                                isClearButtonClicked = true;
+                                isClearButtonClicked = true
                             }
                         } else {
                             // Layout is LTR.
                             // Get the start of the button on the right side.
                             clearButtonStart =
-                                (width - paddingEnd - mClearButtonImage.intrinsicWidth);
+                                (width - paddingEnd - mClearButtonImage.intrinsicWidth)
+
+
+                            //Get the search of the button on the left side
+                          /*  clearSearchStart = (
+                                    width - paddingStart - mSearchImage.intrinsicWidth
+                                    )*/
                             // If the touch occurred after the start of the button,
                             // set isClearButtonClicked to true.
                             if (event!!.getX() > clearButtonStart) {
-                                isClearButtonClicked = true;
+                                isClearButtonClicked = true
                             }
+
                         }
+
                         // Check for actions if the button is tapped.
                         if (isClearButtonClicked) {
                             // Check for ACTION_DOWN (always occurs before ACTION_UP).
-                            if (event!!.getAction() == MotionEvent.ACTION_DOWN) {
+                            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                                 // Switch to the black version of clear button.
                                 mClearButtonImage =
                                     ResourcesCompat.getDrawable(
@@ -67,6 +80,7 @@ var mClearButtonImage: Drawable
                                         R.drawable.ic_clear_black, null
                                     )!!
                                 showClearButton()
+
                             }
                             // Check for ACTION_UP.
                             if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -91,6 +105,19 @@ var mClearButtonImage: Drawable
 
             })
 
+/*            setOnFocusChangeListener(object : OnFocusChangeListener {
+                override fun onFocusChange(view: View?, isFocus: Boolean) {
+                    if(isFocus) {
+                       hideClearButton()
+                       if(isClearButtonContinue) {
+                            showClearButton()
+                        }
+                    }
+                }
+
+            })*/
+
+
             addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     // Do nothing.
@@ -98,6 +125,8 @@ var mClearButtonImage: Drawable
 
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     showClearButton()
+                //    isClearButtonContinue = true
+
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
@@ -105,7 +134,10 @@ var mClearButtonImage: Drawable
                 }
 
             })
+
+
         }
+
 
    fun showClearButton() {
         // Sets the Drawables (if any) to appear to the left of,
@@ -125,4 +157,6 @@ var mClearButtonImage: Drawable
     fun hideClearButton() {
         setCompoundDrawablesRelativeWithIntrinsicBounds(null, null,null, null)
     }
+
+
 }
